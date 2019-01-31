@@ -21,14 +21,23 @@ int rec(const int ia, const int ib, const V& sa, const V& sb, vector<V>& memo) {
 	}
 
 	int ans = UNSET;
-	for (int nia = 0; nia < ia; nia++) {
-		for (int nib = 0; nib < ib; nib++) {
-			int cur = (sa[ia] - sa[nia] - (ia - nia)) * (sb[ib] - sb[nib] - (ib - nib));					int newans = cur + rec(nia, nib, sa, sb, memo);
-			if (ans == UNSET || newans < ans) {
-				ans = newans;
-			}
+
+	for (int nib = 0; nib < ib; nib++) {
+		int cur = (sa[ia] - sa[ia - 1]  - 1) * (sb[ib] - sb[nib] - (ib - nib));
+		int newans = cur + rec(ia - 1, nib, sa, sb, memo);
+		if (ans == UNSET || newans < ans) {
+			ans = newans;
 		}
 	}
+
+	for (int nia = 0; nia < ia; nia++) {
+		int cur = (sb[ib] - sb[ib - 1] - 1) * (sa[ia] - sa[nia] - (ia - nia));
+		int newans = cur + rec(nia, ib - 1, sa, sb, memo);
+		if (ans == UNSET || newans < ans) {
+			ans = newans;
+		}
+	}
+	
 	assert(ans != UNSET);
 
 	memo[ia][ib] = ans;
